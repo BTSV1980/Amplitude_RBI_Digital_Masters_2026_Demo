@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flammwerk – Burger, Coupons & Bestellen</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍔</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<!-- ================= Amplitude: Analytics + Session Replay + Guides & Surveys ================= -->
+<script src="https://cdn.amplitude.com/script/f635d92a69c06c9cf12789c8c5496569.js"></script>
+<script src="https://cdn.amplitude.com/script/f635d92a69c06c9cf12789c8c5496569.engagement.js"></script>
+<script>
+  (function () {
+    var KEY = 'f635d92a69c06c9cf12789c8c5496569';
+    try {
+      if (window.sessionReplay) window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
+      if (window.engagement) window.amplitude.add(window.engagement.plugin());
+      window.amplitude.init(KEY, {
+        fetchRemoteConfig: true,
+        autocapture: {
+          attribution: true, sessions: true, formInteractions: true, fileDownloads: true,
+          elementInteractions: true, frustrationInteractions: true, webVitals: true,
+          pageViews: { trackHistoryChanges: 'all' }
+        }
+      });
+    } catch (e) { console.warn('Amplitude init failed', e); }
+  })();
+</script>
+
+<style>
+:root{
+  --kohle:#2A1810; --kohle-2:#3E2619; --flamme:#E4572E; --flamme-d:#C2431F;
+  --senf:#F3B23A; --bun:#F6E4C8; --bun-2:#EFD5AC; --salat:#4E8A3C; --papier:#FFFBF4;
+  --text:#2A1810; --muted:#7A5E4C; --line:#E7CFAE;
+  --r-lg:22px; --r-md:14px; --r-sm:10px;
+  --display:'Bowlby One', 'Arial Black', Impact, sans-serif;
+  --ui:'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--ui);color:var(--text);background:var(--kohle);-webkit-font-smoothing:antialiased;
+  display:flex;justify-content:center;align-items:center;min-height:100%}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--senf);outline-offset:2px}
+input{font:inherit}
+
+/* phone shell: framed on desktop, edge-to-edge on phones */
+.shell{position:relative;width:100%;max-width:420px;height:100vh;height:100dvh;background:var(--bun);
+  display:flex;flex-direction:column;overflow:hidden}
+@media (min-width:560px){
+  .shell{height:min(880px,94vh);border-radius:44px;box-shadow:0 0 0 10px #140b06,0 30px 80px rgba(0,0,0,.5)}
+}
+.topbar{padding:calc(env(safe-area-inset-top,0px) + 14px) 18px 12px;display:flex;align-items:center;gap:10px;background:var(--bun)}
+.wordmark{font-family:var(--display);font-size:24px;line-height:1;color:var(--kohle);letter-spacing:-.5px}
+.wordmark span{color:var(--flamme)}
+.loc-chip{margin-left:auto;display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;
+  background:var(--papier);border:1.5px solid var(--line);font-size:13px;font-weight:700;max-width:58%}
+.loc-chip b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+main{flex:1;overflow-y:auto;overflow-x:hidden;padding:4px 0 110px;scroll-behavior:smooth}
+.view{display:none}.view.on{display:block}
+.pad{padding:0 18px}
+h2.sec{font-family:var(--display);font-size:20px;line-height:1.15;margin:26px 18px 12px;font-weight:400}
+.sub{color:var(--muted);font-size:14px;line-height:1.45}
+
+/* hero */
+.hero{margin:6px 18px 0;border-radius:var(--r-lg);background:var(--kohle);color:var(--bun);position:relative;overflow:hidden;
+  padding:22px 20px 20px;min-height:250px}
+.hero::after{content:"";position:absolute;inset:auto -40px -70px auto;width:230px;height:230px;border-radius:50%;
+  background:radial-gradient(circle,rgba(228,87,46,.55),rgba(228,87,46,0) 70%)}
+.hero h1{font-family:var(--display);font-weight:400;font-size:34px;line-height:1.02;max-width:62%;position:relative;z-index:1}
+.hero p{font-size:14px;line-height:1.4;margin:10px 0 18px;max-width:55%;color:#E9D2B2;position:relative;z-index:1}
+.hero .burger{position:absolute;right:-6px;bottom:18px;width:178px;z-index:1;filter:drop-shadow(0 10px 14px rgba(0,0,0,.4))}
+.price-flag{position:absolute;right:16px;top:16px;z-index:2;background:var(--senf);color:var(--kohle);font-family:var(--display);
+  font-size:17px;padding:8px 10px;border-radius:12px;transform:rotate(6deg)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:999px;font-weight:800;font-size:15px;position:relative;z-index:1}
+.btn-fire{background:var(--flamme);color:#fff}.btn-fire:active{background:var(--flamme-d)}
+.btn-dark{background:var(--kohle);color:var(--bun)}
+.btn-ghost{background:var(--papier);border:1.5px solid var(--line)}
+.btn-block{width:100%}
+
+/* coupon tickets — perforated */
+.tickets{display:flex;gap:12px;overflow-x:auto;padding:2px 18px 6px;scroll-snap-type:x mandatory}
+.tickets::-webkit-scrollbar{display:none}
+.ticket{--notch:11px;flex:0 0 250px;scroll-snap-align:start;display:grid;grid-template-columns:1fr 84px;background:var(--papier);
+  border-radius:16px;min-height:118px;
+  -webkit-mask:radial-gradient(circle var(--notch) at calc(100% - 84px) 0,#0000 98%,#000) top/100% 51% no-repeat,
+               radial-gradient(circle var(--notch) at calc(100% - 84px) 100%,#0000 98%,#000) bottom/100% 51% no-repeat;
+          mask:radial-gradient(circle var(--notch) at calc(100% - 84px) 0,#0000 98%,#000) top/100% 51% no-repeat,
+               radial-gradient(circle var(--notch) at calc(100% - 84px) 100%,#0000 98%,#000) bottom/100% 51% no-repeat}
+.ticket .t-main{padding:14px 12px 12px 14px;border-right:2px dashed var(--line);display:flex;flex-direction:column;gap:6px}
+.ticket .t-title{font-weight:800;font-size:15px;line-height:1.2}
+.ticket .t-meta{font-size:12px;color:var(--muted)}
+.ticket .t-side{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:8px}
+.ticket .t-save{font-family:var(--display);font-size:18px;color:var(--flamme);text-align:center;line-height:1}
+.ticket .t-act{font-size:12px;font-weight:800;padding:8px 10px;border-radius:999px;background:var(--kohle);color:var(--bun)}
+.ticket.active .t-act{background:var(--salat);color:#fff}
+.ticket .t-code{font-family:var(--display);font-size:13px;letter-spacing:1px;color:var(--salat)}
+.ticket-list{display:grid;gap:12px;padding:0 18px}
+.ticket-list .ticket{flex:none;width:100%;grid-template-columns:1fr 100px;
+  -webkit-mask:radial-gradient(circle var(--notch) at calc(100% - 100px) 0,#0000 98%,#000) top/100% 51% no-repeat,
+               radial-gradient(circle var(--notch) at calc(100% - 100px) 100%,#0000 98%,#000) bottom/100% 51% no-repeat;
+          mask:radial-gradient(circle var(--notch) at calc(100% - 100px) 0,#0000 98%,#000) top/100% 51% no-repeat,
+               radial-gradient(circle var(--notch) at calc(100% - 100px) 100%,#0000 98%,#000) bottom/100% 51% no-repeat}
+
+/* products */
+.prod{display:grid;grid-template-columns:78px 1fr auto;gap:12px;align-items:center;padding:12px;background:var(--papier);
+  border-radius:var(--r-md);margin:0 18px 10px}
+.prod svg{width:78px;height:62px}
+.prod h3{font-size:15px;font-weight:800}
+.prod .p{font-size:14px;font-weight:700;margin-top:4px}
+.prod .d{font-size:12px;color:var(--muted);margin-top:2px}
+.add{width:40px;height:40px;border-radius:50%;background:var(--flamme);color:#fff;font-size:24px;font-weight:700;line-height:1}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 18px 14px}
+.chips::-webkit-scrollbar{display:none}
+.chip{padding:9px 14px;border-radius:999px;background:var(--papier);border:1.5px solid var(--line);font-size:13px;font-weight:700;white-space:nowrap}
+.chip.on{background:var(--kohle);color:var(--bun);border-color:var(--kohle)}
+
+.banner{margin:22px 18px 0;padding:16px;border-radius:var(--r-lg);background:var(--senf);display:flex;gap:14px;align-items:center}
+.banner b{display:block;font-family:var(--display);font-weight:400;font-size:17px;line-height:1.15}
+.banner span{font-size:13px}
+.banner .btn{margin-left:auto;padding:10px 14px;font-size:13px;flex-shrink:0}
+
+/* cart bar */
+.cartbar{position:absolute;left:14px;right:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 82px);z-index:5;display:none;
+  background:var(--kohle);color:var(--bun);border-radius:18px;padding:12px 14px;align-items:center;gap:12px;box-shadow:0 10px 24px rgba(42,24,16,.35)}
+.cartbar.on{display:flex}
+.cartbar .n{background:var(--flamme);color:#fff;border-radius:999px;min-width:28px;height:28px;display:grid;place-items:center;font-weight:800;font-size:14px}
+.cartbar .btn{margin-left:auto;padding:10px 16px;font-size:14px}
+
+/* tabbar */
+.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:6;background:var(--papier);border-top:1.5px solid var(--line);
+  display:grid;grid-template-columns:repeat(5,1fr);padding:8px 6px calc(env(safe-area-inset-bottom,0px) + 10px)}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:700;color:var(--muted);padding:4px 0}
+.tab svg{width:24px;height:24px}
+.tab.on{color:var(--flamme)}
+.tab.order{color:var(--papier)}
+.tab.order .o{width:52px;height:52px;margin-top:-26px;border-radius:50%;background:var(--flamme);display:grid;place-items:center;
+  box-shadow:0 0 0 5px var(--papier)}
+.tab.order span{color:var(--muted)}.tab.order.on span{color:var(--flamme)}
+
+/* forms & cards */
+.card{background:var(--papier);border-radius:var(--r-lg);padding:18px;margin:0 18px 12px}
+.card h3{font-family:var(--display);font-weight:400;font-size:20px;line-height:1.15;margin-bottom:6px}
+.field{display:block;margin-top:14px}
+.field span{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
+.field input{width:100%;padding:13px 14px;border-radius:var(--r-sm);border:1.5px solid var(--line);background:#fff}
+.stack{display:grid;gap:10px;margin-top:14px}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin:16px 0 2px}
+.or::before,.or::after{content:"";flex:1;height:1.5px;background:var(--line)}
+.seg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.seg button{padding:12px;border-radius:var(--r-sm);border:1.5px solid var(--line);background:#fff;font-weight:700;font-size:14px}
+.seg button.on{border-color:var(--kohle);background:var(--kohle);color:var(--bun)}
+.row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1.5px dashed var(--line);font-size:14px}
+.row:last-child{border-bottom:0}
+.rest{display:flex;gap:12px;align-items:center;padding:14px;background:var(--papier);border-radius:var(--r-md);margin:0 18px 10px;width:calc(100% - 36px);text-align:left}
+.rest .pin{width:40px;height:40px;border-radius:12px;background:var(--bun-2);display:grid;place-items:center;flex-shrink:0}
+.rest b{display:block;font-size:15px}
+.rest small{color:var(--muted);font-size:12px}
+.rest .tag{margin-left:auto;font-size:11px;font-weight:800;color:var(--salat)}
+.rest.on{outline:2.5px solid var(--flamme)}
+.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.stat div{background:var(--bun);border-radius:var(--r-sm);padding:10px;text-align:center}
+.stat b{display:block;font-family:var(--display);font-weight:400;font-size:20px}
+.stat span{font-size:11px;color:var(--muted);font-weight:700}
+
+/* sheets */
+.scrim{position:absolute;inset:0;background:rgba(20,11,6,.5);z-index:20;display:none}
+.scrim.on{display:block}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;background:var(--bun);border-radius:26px 26px 0 0;
+  padding:10px 18px calc(env(safe-area-inset-bottom,0px) + 22px);transform:translateY(105%);transition:transform .28s ease;max-height:88%;overflow-y:auto}
+.sheet.on{transform:none}
+.sheet .grab{width:44px;height:5px;border-radius:9px;background:var(--line);margin:0 auto 14px}
+.sheet h3{font-family:var(--display);font-weight:400;font-size:22px;margin-bottom:6px}
+.perm{text-align:center;padding:10px 6px}
+.perm .ico{width:64px;height:64px;border-radius:20px;background:var(--papier);display:grid;place-items:center;margin:0 auto 12px}
+.success{text-align:center;padding:30px 18px}
+.success .big{font-family:var(--display);font-size:30px;line-height:1.05;margin:14px 0 8px}
+.success .code{display:inline-block;margin-top:14px;padding:12px 18px;border-radius:14px;background:var(--kohle);color:var(--senf);font-family:var(--display);font-size:26px;letter-spacing:2px}
+.toast{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 70px);transform:translate(-50%,-20px);opacity:0;z-index:30;
+  background:var(--kohle);color:var(--bun);padding:10px 16px;border-radius:999px;font-size:13px;font-weight:700;transition:.25s;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.foot{font-size:11px;color:var(--muted);text-align:center;margin:28px 18px 0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="shell" id="app">
+  <header class="topbar">
+    <div class="wordmark" id="brand" title="Flammwerk">Flamm<span>werk</span></div>
+    <button class="loc-chip" id="loc-chip" data-go="restaurants" aria-label="Restaurant wählen">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      <b id="loc-label">Restaurant wählen</b>
+    </button>
+  </header>
+
+  <main id="scroller">
+    <!-- HOME / landing -->
+    <section class="view on" id="view-home" data-view="home">
+      <div class="hero" id="hero-deal">
+        <div class="price-flag">-30 %</div>
+        <h1>Double Smash, doppelt heiß.</h1>
+        <p>Nur in der App: der neue Double Smash mit 30 % Rabatt.</p>
+        <button class="btn btn-fire" id="hero-cta" data-coupon="C-104">Coupon holen</button>
+        <div class="burger" data-burger="double"></div>
+      </div>
+
+      <div class="banner" id="signup-banner">
+        <div><b>Neu hier?</b><span>Konto anlegen und den Willkommens-Coupon sichern.</span></div>
+        <button class="btn btn-dark" id="banner-signup" data-go="profile">Registrieren</button>
+      </div>
+
+      <h2 class="sec">Deine Coupons</h2>
+      <div class="tickets" id="home-coupons"></div>
+
+      <h2 class="sec">Beliebt in deiner Nähe</h2>
+      <div id="home-products"></div>
+      <p class="foot">Demo-Anwendung · Flammwerk ist eine fiktive Marke</p>
+    </section>
+
+    <!-- COUPONS -->
+    <section class="view" id="view-coupons" data-view="coupons">
+      <h2 class="sec">Alle Coupons</h2>
+      <p class="sub pad" style="margin:-4px 0 16px">Aktivieren, bestellen, sparen. Im Restaurant den Code an der Kasse zeigen.</p>
+      <div class="ticket-list" id="coupon-list"></div>
+    </section>
+
+    <!-- ORDER -->
+    <section class="view" id="view-order" data-view="order">
+      <h2 class="sec">Bestellen</h2>
+      <div class="chips" id="cat-chips"></div>
+      <div id="menu-list"></div>
+    </section>
+
+    <!-- RESTAURANTS -->
+    <section class="view" id="view-restaurants" data-view="restaurants">
+      <h2 class="sec">Restaurants</h2>
+      <div class="card" id="loc-card">
+        <h3>Restaurants in deiner Nähe</h3>
+        <p class="sub">Mit deinem Standort zeigen wir dir Öffnungszeiten, Drive-In und Wartezeiten.</p>
+        <div class="stack"><button class="btn btn-fire btn-block" id="loc-btn">Standort freigeben</button></div>
+      </div>
+      <div id="restaurant-list"></div>
+    </section>
+
+    <!-- PROFILE -->
+    <section class="view" id="view-profile" data-view="profile">
+      <div id="profile-guest">
+        <h2 class="sec">Konto anlegen</h2>
+        <div class="card" id="signup-card">
+          <h3>Willkommen bei Flammwerk</h3>
+          <p class="sub">Coupons, schnellere Bestellung und Punkte bei jedem Einkauf.</p>
+          <div class="stack">
+            <button class="btn btn-dark btn-block" id="signup-apple" data-method="Apple">Mit Apple fortfahren</button>
+            <button class="btn btn-ghost btn-block" id="signup-google" data-method="Google">Mit Google fortfahren</button>
+          </div>
+          <div class="or">oder mit E-Mail</div>
+          <form id="signup-form" autocomplete="off" onsubmit="return false">
+            <label class="field"><span>Vorname</span><input id="su-name" name="firstname" placeholder="z. B. Lena" required></label>
+            <label class="field"><span>E-Mail</span><input id="su-mail" name="email" type="email" placeholder="lena@beispiel.de" required></label>
+            <div class="stack"><button class="btn btn-fire btn-block" id="signup-submit" type="submit">Konto erstellen</button></div>
+          </form>
+        </div>
+      </div>
+      <div id="profile-user" hidden>
+        <h2 class="sec" id="hello">Hallo!</h2>
+        <div class="card">
+          <h3 id="tier-label">Bronze</h3>
+          <p class="sub">Jede Bestellung bringt dich näher an Silber.</p>
+          <div class="stat"><div><b id="st-orders">0</b><span>Bestellungen</span></div><div><b id="st-coupons">0</b><span>Coupons aktiv</span></div><div><b id="st-saved">0 €</b><span>gespart</span></div></div>
+        </div>
+        <div class="card" id="payment-card">
+          <h3>Zahlungsmethode</h3>
+          <p class="sub" id="pay-label">Noch keine Zahlungsmethode hinterlegt.</p>
+          <div class="stack"><button class="btn btn-dark btn-block" id="pay-add-btn">Zahlungsmethode hinzufügen</button></div>
+        </div>
+        <div class="card">
+          <h3>Demo</h3>
+          <p class="sub">Setzt Konto, Coupons und die Amplitude-Identität zurück, damit Guide und Umfrage erneut erscheinen.</p>
+          <div class="stack"><button class="btn btn-ghost btn-block" id="demo-reset">Demo zurücksetzen</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ORDER SUCCESS -->
+    <section class="view" id="view-success" data-view="success">
+      <div class="success" id="order-success">
+        <div class="burger" data-burger="classic" style="width:150px;margin:0 auto"></div>
+        <div class="big">Bestellung ist raus!</div>
+        <p class="sub" id="success-sub">Wir legen los.</p>
+        <div class="code" id="success-code">A-000</div>
+        <div class="stack" style="margin-top:24px"><button class="btn btn-dark btn-block" data-go="home">Zur Startseite</button></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="cartbar" id="cartbar">
+    <div class="n" id="cart-n">0</div>
+    <div><b id="cart-total">0,00 €</b><div style="font-size:12px;opacity:.8">Warenkorb</div></div>
+    <button class="btn btn-fire" id="checkout-btn">Zur Kasse</button>
+  </div>
+
+  <nav class="tabbar" aria-label="Hauptnavigation">
+    <button class="tab on" data-go="home" id="tab-home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>Start</button>
+    <button class="tab" data-go="coupons" id="tab-coupons"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 8a2 2 0 002-2h14a2 2 0 002 2v2a2 2 0 000 4v2a2 2 0 00-2 2H5a2 2 0 00-2-2v-2a2 2 0 000-4z"/><path d="M14 6v12" stroke-dasharray="2 2"/></svg>Coupons</button>
+    <button class="tab order" data-go="order" id="tab-order"><div class="o"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 11h16M5 11a7 5 0 0114 0M4 15h16M5 15v1a3 3 0 003 3h8a3 3 0 003-3v-1"/></svg></div><span>Bestellen</span></button>
+    <button class="tab" data-go="restaurants" id="tab-restaurants"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>Restaurants</button>
+    <button class="tab" data-go="profile" id="tab-profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>Profil</button>
+  </nav>
+
+  <div class="scrim" id="scrim"></div>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true"><div class="grab"></div><div id="sheet-body"></div></div>
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+/* ============================== Data ============================== */
+const PRODUCTS = [
+  {id:'classic', name:'Flammwerk Classic', cat:'Burger', price:6.49, d:'Flammgegrillt, Salat, Tomate, Hausmayo', b:'classic'},
+  {id:'double', name:'Double Smash', cat:'Burger', price:8.99, d:'Zwei Smash-Patties, doppelt Cheddar', b:'double'},
+  {id:'chicken', name:'Crispy Chicken', cat:'Chicken', price:6.99, d:'Knuspriges Hähnchen, Coleslaw', b:'chicken'},
+  {id:'veggie', name:'Veggie Glut', cat:'Plant-based', price:6.79, d:'Pflanzliches Patty, Rauchpaprika', b:'veggie'},
+  {id:'bites', name:'Chili Cheese Bites', cat:'Snacks', price:3.49, d:'6 Stück, scharf und cremig', b:'bites'},
+  {id:'fries', name:'Pommes groß', cat:'Beilagen', price:3.29, d:'Mit Meersalz', b:'fries'},
+  {id:'menu1', name:'Menü Classic', cat:'Menü', price:10.49, d:'Classic, Pommes, Getränk 0,5 l', b:'classic'},
+  {id:'menu2', name:'Menü Double Smash', cat:'Menü', price:12.99, d:'Double Smash, Pommes, Getränk 0,5 l', b:'double'},
+  {id:'shake', name:'Shake Vanille', cat:'Getränke', price:3.19, d:'Mit echter Bourbon-Vanille', b:'shake'}
+];
+const COUPONS = [
+  {id:'C-101', name:'2 für 1 Classic', save:6.49, label:'2 für 1', meta:'Gültig bis 12.10.'},
+  {id:'C-102', name:'Menü für 7,99 €', save:2.50, label:'7,99 €', meta:'Jedes Menü Classic'},
+  {id:'C-103', name:'Gratis Pommes zur App-Bestellung', save:3.29, label:'Gratis', meta:'Ab 10 € Bestellwert'},
+  {id:'C-104', name:'Double Smash -30%', save:2.70, label:'-30 %', meta:'Nur in der App'},
+  {id:'C-105', name:'Chicken Bites 9 Stk. 2,99 €', save:1.50, label:'2,99 €', meta:'Solange der Vorrat reicht'}
+];
+const RESTAURANTS = [
+  {id:'R-1041', name:'Leipzig Hauptbahnhof', city:'Leipzig', dist:'1,2 km', drive:false, wait:6},
+  {id:'R-1057', name:'Halle Neustadt', city:'Halle (Saale)', dist:'3,8 km', drive:true, wait:5},
+  {id:'R-1112', name:'Leipzig Paunsdorf Center', city:'Leipzig', dist:'6,1 km', drive:true, wait:8},
+  {id:'R-1203', name:'Merseburg Süd', city:'Merseburg', dist:'9,4 km', drive:true, wait:4},
+  {id:'R-1320', name:'Berlin Alexanderplatz', city:'Berlin', dist:'158 km', drive:false, wait:11}
+];
+const PAYMENTS = ['PayPal','Apple Pay','Google Pay','Kreditkarte'];
+const ORDER_TYPES = ['Abholung','Drive-In','Lieferung','Im Restaurant'];
+
+/* ============================== State ============================== */
+const LS = 'flammwerk_demo_v1';
+const blank = () => ({user:null, coupons:[], restaurant:null, location:false, payment:null, orders:0, saved:0,
+  ob:{started:false, done:false, steps:{}}, cart:[], lpTracked:false});
+let S = blank();
+try { const raw = localStorage.getItem(LS); if (raw) S = Object.assign(blank(), JSON.parse(raw)); } catch(e) {}
+const save = () => { try { localStorage.setItem(LS, JSON.stringify(S)); } catch(e) {} };
+
+/* ============================== Amplitude helpers ============================== */
+const amp = () => window.amplitude;
+function T(name, props) { try { amp() && amp().track(name, props || {}); } catch(e) {} }
+function identify(fn) { try { if (!amp()) return; const id = new amp().Identify(); fn(id); amp().identify(id); } catch(e) {} }
+
+/* traffic source classification — mirrors the historical taxonomy */
+function trafficSource() {
+  const q = new URLSearchParams(location.search);
+  const us = (q.get('src') || q.get('utm_source') || '').toLowerCase();
+  const um = (q.get('utm_medium') || '').toLowerCase();
+  let ref = ''; try { ref = document.referrer ? new URL(document.referrer).hostname : ''; } catch(e) {}
+  if (ref && ref === location.hostname) ref = '';
+  const has = (s, ...k) => k.some(x => s.includes(x));
+  let src = 'Direct', med = 'direct';
+  if (us) {
+    if (has(us,'chatgpt','openai')) [src,med] = ['ChatGPT','ai_assistant'];
+    else if (has(us,'perplexity')) [src,med] = ['Perplexity','ai_assistant'];
+    else if (has(us,'gemini')) [src,med] = ['Gemini','ai_assistant'];
+    else if (has(us,'google')) [src,med] = (has(um,'cpc','paid') ? ['Google Ads','paid_search'] : ['Google','organic']);
+    else if (has(us,'instagram')) [src,med] = ['Instagram','social'];
+    else if (has(us,'facebook','fb')) [src,med] = ['Facebook','social'];
+    else if (has(us,'tiktok')) [src,med] = ['TikTok','social'];
+    else if (has(us,'newsletter','email')) [src,med] = ['Newsletter','email'];
+    else [src,med] = [q.get('utm_source'), um || 'referral'];
+  } else if (ref) {
+    if (has(ref,'chatgpt.com','openai')) [src,med] = ['ChatGPT','ai_assistant'];
+    else if (has(ref,'perplexity')) [src,med] = ['Perplexity','ai_assistant'];
+    else if (has(ref,'gemini.google')) [src,med] = ['Gemini','ai_assistant'];
+    else if (has(ref,'google.')) [src,med] = ['Google','organic'];
+    else if (has(ref,'instagram')) [src,med] = ['Instagram','social'];
+    else if (has(ref,'facebook')) [src,med] = ['Facebook','social'];
+    else if (has(ref,'tiktok')) [src,med] = ['TikTok','social'];
+    else [src,med] = [ref,'referral'];
+  }
+  return {traffic_source:src, traffic_medium:med, referring_domain: ref || undefined,
+    utm_source:q.get('utm_source') || undefined, utm_medium:q.get('utm_medium') || undefined,
+    utm_campaign:q.get('utm_campaign') || undefined, is_ai_referral: med === 'ai_assistant'};
+}
+
+/* ============================== Illustrations (original SVG) ============================== */
+function burgerSVG(kind) {
+  if (kind === 'fries') return `<svg viewBox="0 0 120 96" aria-hidden="true"><g fill="#F3B23A" stroke="#C98A1B" stroke-width="1.5">${[18,30,42,54,66,78,90].map((x,i)=>`<rect x="${x}" y="${14+(i%3)*6}" width="10" height="50" rx="3" transform="rotate(${(i-3)*4} ${x+5} 60)"/>`).join('')}</g><path d="M22 48h76l-9 44H31z" fill="#E4572E"/><path d="M40 62c6 8 34 8 40 0" stroke="#FFFBF4" stroke-width="4" fill="none" stroke-linecap="round"/></svg>`;
+  if (kind === 'shake') return `<svg viewBox="0 0 120 96" aria-hidden="true"><path d="M44 10c4-8 28-8 32 0 8 0 12 6 10 12H34c-2-6 2-12 10-12z" fill="#FFFBF4" stroke="#E7CFAE" stroke-width="2"/><rect x="70" y="0" width="5" height="22" rx="2" fill="#E4572E" transform="rotate(14 72 12)"/><path d="M34 24h52l-7 68H41z" fill="#F6E4C8" stroke="#2A1810" stroke-width="2"/><path d="M38 44h44" stroke="#E4572E" stroke-width="6"/></svg>`;
+  if (kind === 'bites') return `<svg viewBox="0 0 120 96" aria-hidden="true">${[[30,52],[58,44],[86,54],[44,74],[74,74]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="17" ry="13" fill="#D98A2B" stroke="#A8601A" stroke-width="2"/><circle cx="${x-5}" cy="${y-3}" r="2" fill="#E4572E"/><circle cx="${x+5}" cy="${y+2}" r="1.8" fill="#F3B23A"/>`).join('')}</svg>`;
+  const cheese = kind !== 'veggie' ? `<path d="M14 60h92l-10 9-8-6-10 9-9-7-11 8-9-8-10 8-10-8-8 6z" fill="#F3B23A"/>` : '';
+  const patty = kind === 'chicken'
+    ? `<rect x="10" y="48" width="100" height="14" rx="7" fill="#D98A2B"/><path d="M16 52h88" stroke="#EDB35A" stroke-width="3" stroke-dasharray="6 5"/>`
+    : kind === 'veggie' ? `<rect x="12" y="48" width="96" height="14" rx="7" fill="#7A4A2A"/><path d="M18 55h84" stroke="#B5462A" stroke-width="3" stroke-dasharray="3 7"/>`
+    : `<rect x="12" y="48" width="96" height="14" rx="7" fill="#5A2F1B"/><path d="M20 52l8 6m10-6l8 6m10-6l8 6m10-6l8 6m10-6l8 6" stroke="#2A1810" stroke-width="2.5" stroke-linecap="round"/>`;
+  const second = kind === 'double' ? `<g transform="translate(0,-16)">${patty}${cheese}</g>` : '';
+  return `<svg viewBox="0 0 120 96" aria-hidden="true">
+    <path d="M12 44c0-22 20-34 48-34s48 12 48 34z" fill="#D9892F"/>
+    <path d="M16 42c2-16 18-26 44-26" stroke="#EDB35A" stroke-width="4" fill="none" stroke-linecap="round"/>
+    ${[[34,24],[50,18],[66,20],[82,26],[58,30],[42,32],[74,34]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="2.4" ry="1.4" fill="#FFF3D6"/>`).join('')}
+    <path d="M8 46c8-6 14 4 22-2s14 4 22-2 14 4 22-2 14 4 22-2 12 2 16 2v6H8z" fill="#4E8A3C"/>
+    ${kind === 'veggie' || kind === 'classic' ? `<rect x="16" y="46" width="88" height="5" rx="2.5" fill="#C8281E"/>` : ''}
+    ${second}${patty}${cheese}
+    <path d="M12 70h96v6c0 8-10 14-22 14H34c-12 0-22-6-22-14z" fill="#C97A28"/>
+  </svg>`;
+}
+function paintBurgers(root) { (root || document).querySelectorAll('[data-burger]').forEach(el => el.innerHTML = burgerSVG(el.dataset.burger)); }
+
+/* ============================== UI helpers ============================== */
+const $ = s => document.querySelector(s);
+const eur = n => n.toLocaleString('de-DE', {style:'currency', currency:'EUR'});
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2200); }
+function openSheet(html) { $('#sheet-body').innerHTML = html; $('#scrim').classList.add('on'); $('#sheet').classList.add('on'); }
+function closeSheet() { $('#scrim').classList.remove('on'); $('#sheet').classList.remove('on'); }
+$('#scrim').onclick = closeSheet;
+
+function go(view, opts) {
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.dataset.view === view));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.go === view));
+  $('#scroller').scrollTop = 0;
+  if (!(opts && opts.silent)) history.pushState({view}, '', view === 'home' ? location.pathname + location.search : '#/' + view);
+  render();
+}
+window.addEventListener('popstate', () => { const v = (location.hash.replace('#/','') || 'home'); go(v, {silent:true}); });
+document.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (g) { e.preventDefault(); go(g.dataset.go); } });
+
+/* ============================== Onboarding tracking (Guide companion) ============================== */
+const OB_STEPS = {location:[2,'Standort freigeben'], restaurant:[3,'Lieblingsrestaurant wählen'], coupon:[4,'Ersten Coupon aktivieren'], payment:[5,'Zahlungsmethode hinterlegen']};
+function obStep(key) {
+  if (!S.ob.started || S.ob.done || S.ob.steps[key]) return;
+  S.ob.steps[key] = true;
+  const [n, name] = OB_STEPS[key];
+  T('Onboarding Step Completed', {step_number:n, step_name:name, total_steps:5});
+  if (Object.keys(OB_STEPS).every(k => S.ob.steps[k])) {
+    S.ob.done = true;
+    T('Onboarding Completed', {onboarding_version:'v2_guide', steps_completed:5});
+    identify(i => i.set('onboarding_status', 'Completed'));
+    toast('Alles eingerichtet – guten Appetit!');
+  }
+  save();
+}
+
+/* ============================== Actions ============================== */
+function needAccount(reason) {
+  if (S.user) return false;
+  toast(reason || 'Bitte zuerst ein Konto anlegen');
+  go('profile'); return true;
+}
+function activateCoupon(id, source) {
+  if (needAccount('Konto anlegen, um Coupons zu aktivieren')) return;
+  if (S.coupons.includes(id)) { toast('Coupon ist bereits aktiv'); return; }
+  const c = COUPONS.find(x => x.id === id);
+  S.coupons.push(id); save();
+  T('Coupon Activated', {coupon_id:c.id, coupon_name:c.name, discount_eur:c.save, activation_source: source || 'coupons_tab'});
+  toast('Coupon aktiviert: ' + c.name);
+  obStep('coupon'); render();
+}
+function addToCart(pid) {
+  const p = PRODUCTS.find(x => x.id === pid);
+  S.cart.push(pid); save();
+  T('Menu Item Added', {product_name:p.name, product_category:p.cat, price_eur:p.price, cart_size:S.cart.length});
+  toast(p.name + ' im Warenkorb'); render();
+}
+function cartTotal() { return S.cart.reduce((s, id) => s + PRODUCTS.find(p => p.id === id).price, 0); }
+
+let checkout = {type:'Abholung', pay:null};
+function openCheckout() {
+  if (needAccount('Konto anlegen, um zu bestellen')) return;
+  checkout.pay = S.payment || 'PayPal';
+  const items = S.cart.map(id => PRODUCTS.find(p => p.id === id));
+  const coupon = S.coupons.length ? COUPONS.find(c => c.id === S.coupons[S.coupons.length - 1]) : null;
+  const sub = cartTotal(), disc = coupon ? Math.min(coupon.save, sub - 0.5) : 0;
+  T('Order Started', {order_type:checkout.type, item_count:items.length});
+  openSheet(`<h3>Kasse</h3>
+    <p class="sub">${S.restaurant ? 'Restaurant: ' + RESTAURANTS.find(r => r.id === S.restaurant).name : 'Kein Restaurant gewählt – wir nehmen das nächste.'}</p>
+    <div class="seg" id="ot">${ORDER_TYPES.map(o => `<button data-ot="${o}" class="${o === checkout.type ? 'on' : ''}">${o}</button>`).join('')}</div>
+    <div class="card" style="margin:14px 0 0;padding:14px">
+      ${items.map(p => `<div class="row"><span>${p.name}</span><b>${eur(p.price)}</b></div>`).join('')}
+      ${coupon ? `<div class="row"><span>Coupon: ${coupon.name}</span><b style="color:var(--salat)">-${eur(disc)}</b></div>` : ''}
+      <div class="row"><span>Zahlung</span><b>${checkout.pay}</b></div>
+      <div class="row"><b>Gesamt</b><b>${eur(sub - disc)}</b></div>
+    </div>
+    <div class="stack"><button class="btn btn-fire btn-block" id="pay-now">Jetzt bezahlen</button></div>`);
+  document.querySelectorAll('[data-ot]').forEach(b => b.onclick = () => { checkout.type = b.dataset.ot; document.querySelectorAll('[data-ot]').forEach(x => x.classList.toggle('on', x === b)); });
+  $('#pay-now').onclick = () => placeOrder(items, coupon, sub - disc, disc);
+}
+function placeOrder(items, coupon, total, disc) {
+  const first = S.orders === 0;
+  S.orders += 1; S.saved += disc;
+  const r = S.restaurant ? RESTAURANTS.find(x => x.id === S.restaurant) : RESTAURANTS[0];
+  const wait = checkout.type === 'Lieferung' ? 28 : r.wait;
+  const orderId = 'O-' + Math.floor(100000 + Math.random() * 899999);
+  T('Order Completed', {order_id:orderId, order_type:checkout.type, order_value_eur:+total.toFixed(2), item_count:items.length,
+    products:items.map(p => p.name), payment_method:checkout.pay, coupon_used:!!coupon, coupon_id:coupon ? coupon.id : undefined,
+    is_first_order:first, estimated_wait_minutes:wait, restaurant_id:r.id, $revenue:+total.toFixed(2)});
+  try { if (amp() && amp().Revenue) { const rv = new amp().Revenue().setProductId(items[0].id).setPrice(+total.toFixed(2)).setQuantity(1); amp().revenue(rv); } } catch(e) {}
+  if (coupon) { T('Coupon Redeemed', {coupon_id:coupon.id, coupon_name:coupon.name, discount_eur:+disc.toFixed(2)}); S.coupons = S.coupons.filter(c => c !== coupon.id); }
+  const tier = S.orders >= 5 ? 'Gold' : S.orders >= 3 ? 'Silber' : 'Bronze';
+  identify(i => { i.set('orders_count', S.orders); i.set('loyalty_tier', tier); if (first) i.setOnce('first_order_date', new Date().toISOString().slice(0,10)); });
+  if (S.orders === 3 || S.orders === 5) T('Loyalty Tier Reached', {loyalty_tier:tier, orders_count:S.orders});
+  S.cart = []; save(); closeSheet();
+  $('#success-code').textContent = 'A-' + orderId.slice(-3);
+  $('#success-sub').textContent = `${checkout.type} bei ${r.name} · fertig in ca. ${wait} Minuten`;
+  go('success');
+}
+
+/* location permission — in-app sheet so the stage demo never hits a real browser prompt */
+function askLocation() {
+  if (S.location) { toast('Standort ist bereits freigegeben'); return; }
+  openSheet(`<div class="perm"><div class="ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#E4572E" stroke-width="2.4"><path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+    <h3>Standort verwenden?</h3><p class="sub">Flammwerk nutzt deinen Standort nur, um Restaurants und Wartezeiten in deiner Nähe zu zeigen.</p>
+    <div class="stack"><button class="btn btn-fire btn-block" id="perm-yes">Beim Verwenden der App erlauben</button><button class="btn btn-ghost btn-block" id="perm-no">Nicht erlauben</button></div></div>`);
+  $('#perm-yes').onclick = () => { S.location = true; save(); T('Location Permission Granted', {permission_source: S.ob.started && !S.ob.done ? 'onboarding' : 'restaurants_tab'}); closeSheet(); obStep('location'); render(); };
+  $('#perm-no').onclick = () => { T('Location Permission Denied', {permission_source: S.ob.started && !S.ob.done ? 'onboarding' : 'restaurants_tab'}); closeSheet(); toast('Ohne Standort zeigen wir alle Restaurants'); };
+}
+function selectRestaurant(id) {
+  if (needAccount('Konto anlegen, um ein Lieblingsrestaurant zu speichern')) return;
+  const r = RESTAURANTS.find(x => x.id === id);
+  S.restaurant = id; save();
+  T('Restaurant Selected', {restaurant_id:r.id, restaurant_city:r.city, has_drive_in:r.drive, selection_source: S.ob.started && !S.ob.done ? 'onboarding' : 'restaurants_tab'});
+  identify(i => i.set('favorite_restaurant', r.name));
+  toast(r.name + ' ist dein Restaurant'); obStep('restaurant'); render();
+}
+function addPayment() {
+  openSheet(`<h3>Zahlungsmethode</h3><p class="sub">Wähle, wie du in Zukunft bezahlen möchtest.</p>
+    <div class="stack">${PAYMENTS.map(p => `<button class="btn btn-ghost btn-block" data-pm="${p}">${p}</button>`).join('')}</div>`);
+  document.querySelectorAll('[data-pm]').forEach(b => b.onclick = () => {
+    S.payment = b.dataset.pm; save();
+    T('Payment Method Added', {payment_method:S.payment, source: S.ob.started && !S.ob.done ? 'onboarding' : 'profile'});
+    identify(i => i.set('payment_method_saved', true));
+    closeSheet(); toast(S.payment + ' hinterlegt'); obStep('payment'); render();
+  });
+}
+
+/* sign-up */
+let signupStarted = false;
+function startSignup(method) { if (signupStarted) return; signupStarted = true; T('Sign Up Started', {signup_method:method, entry_point: location.hash || '/'}); }
+function createAccount(method, name) {
+  startSignup(method);
+  const uid = 'fw_' + Math.random().toString(16).slice(2, 12);
+  S.user = {id:uid, name: name || (method === 'Apple' ? 'Apple-Nutzer' : method === 'Google' ? 'Google-Nutzer' : 'Gast'), method};
+  try { amp() && amp().setUserId(uid); } catch(e) {}
+  identify(i => { i.setOnce('signup_date', new Date().toISOString().slice(0,10)); i.set('user_type', 'New User'); i.set('loyalty_tier', 'Bronze'); i.set('onboarding_status', 'Started'); });
+  T('Account Created', {signup_method:method});
+  // The Amplitude Guide triggers on "Account Created" / "Onboarding Started"
+  S.ob.started = true;
+  T('Onboarding Started', {onboarding_version:'v2_guide', trigger:'Account Created'});
+  save(); toast('Willkommen, ' + S.user.name + '!');
+  go('home');
+}
+$('#signup-apple').onclick = () => createAccount('Apple');
+$('#signup-google').onclick = () => createAccount('Google');
+['#su-name', '#su-mail'].forEach(s => $(s).addEventListener('focus', () => startSignup('E-Mail')));
+$('#signup-form').addEventListener('submit', () => {
+  const n = $('#su-name').value.trim(), m = $('#su-mail').value.trim();
+  if (!n || !/.+@.+\..+/.test(m)) { toast('Bitte Vorname und gültige E-Mail angeben'); return; }
+  createAccount('E-Mail', n);
+});
+$('#loc-btn').onclick = askLocation;
+$('#pay-add-btn').onclick = addPayment;
+$('#checkout-btn').onclick = openCheckout;
+$('#hero-cta').onclick = () => activateCoupon('C-104', 'home_hero');
+$('#demo-reset').onclick = resetDemo;
+function resetDemo() {
+  try { localStorage.removeItem(LS); } catch(e) {}
+  try { amp() && amp().reset(); } catch(e) {}
+  location.href = location.pathname;
+}
+
+/* ============================== Render ============================== */
+function ticket(c, scope) {
+  const on = S.coupons.includes(c.id);
+  return `<div class="ticket ${on ? 'active' : ''}" id="coupon-${scope}-${c.id}">
+    <div class="t-main"><div class="t-title">${c.name}</div><div class="t-meta">${c.meta}</div>${on ? `<div class="t-code">${c.id.replace('C-','FW')}</div>` : ''}</div>
+    <div class="t-side"><div class="t-save">${c.label}</div><button class="t-act" data-act="${c.id}">${on ? 'Aktiv' : 'Aktivieren'}</button></div></div>`;
+}
+function prodRow(p, scope) {
+  return `<div class="prod" id="prod-${scope}-${p.id}"><div data-burger="${p.b}"></div><div><h3>${p.name}</h3><div class="d">${p.d}</div><div class="p">${eur(p.price)}</div></div>
+    <button class="add" data-add="${p.id}" aria-label="${p.name} hinzufügen">+</button></div>`;
+}
+let activeCat = 'Alle';
+function render() {
+  $('#home-coupons').innerHTML = COUPONS.slice(0, 4).map(c => ticket(c, 'home')).join('');
+  $('#coupon-list').innerHTML = COUPONS.map(c => ticket(c, 'tab')).join('');
+  $('#home-products').innerHTML = PRODUCTS.filter(p => ['double','classic','chicken'].includes(p.id)).map(p => prodRow(p, 'home')).join('');
+  const cats = ['Alle', ...new Set(PRODUCTS.map(p => p.cat))];
+  $('#cat-chips').innerHTML = cats.map(c => `<button class="chip ${c === activeCat ? 'on' : ''}" data-cat="${c}">${c}</button>`).join('');
+  $('#menu-list').innerHTML = PRODUCTS.filter(p => activeCat === 'Alle' || p.cat === activeCat).map(p => prodRow(p, 'menu')).join('');
+  $('#restaurant-list').innerHTML = RESTAURANTS.map(r => `<button class="rest ${S.restaurant === r.id ? 'on' : ''}" id="rest-${r.id}" data-rest="${r.id}">
+    <div class="pin"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2A1810" stroke-width="2.4"><path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z"/></svg></div>
+    <div><b>${r.name}</b><small>${S.location ? r.dist + ' · ' : ''}${r.drive ? 'Drive-In · ' : ''}ca. ${r.wait} Min. Wartezeit</small></div>
+    ${S.restaurant === r.id ? '<span class="tag">Mein Restaurant</span>' : ''}</button>`).join('');
+  $('#loc-card').hidden = S.location;
+  $('#loc-label').textContent = S.restaurant ? RESTAURANTS.find(r => r.id === S.restaurant).name : 'Restaurant wählen';
+  $('#signup-banner').hidden = !!S.user;
+  $('#profile-guest').hidden = !!S.user; $('#profile-user').hidden = !S.user;
+  if (S.user) {
+    $('#hello').textContent = 'Hallo, ' + S.user.name + '!';
+    $('#tier-label').textContent = S.orders >= 5 ? 'Gold' : S.orders >= 3 ? 'Silber' : 'Bronze';
+    $('#st-orders').textContent = S.orders; $('#st-coupons').textContent = S.coupons.length; $('#st-saved').textContent = eur(S.saved);
+    $('#pay-label').textContent = S.payment ? 'Hinterlegt: ' + S.payment : 'Noch keine Zahlungsmethode hinterlegt.';
+    $('#pay-add-btn').textContent = S.payment ? 'Zahlungsmethode ändern' : 'Zahlungsmethode hinzufügen';
+  }
+  const n = S.cart.length;
+  $('#cartbar').classList.toggle('on', n > 0 && !$('#view-success').classList.contains('on'));
+  $('#cart-n').textContent = n; $('#cart-total').textContent = eur(cartTotal());
+  paintBurgers();
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest('[data-act]'); if (a) return activateCoupon(a.dataset.act, $('#view-home').classList.contains('on') ? 'home_carousel' : 'coupons_tab');
+  const ad = e.target.closest('[data-add]'); if (ad) return addToCart(ad.dataset.add);
+  const c = e.target.closest('[data-cat]'); if (c) { activeCat = c.dataset.cat; T('Menu Category Viewed', {category_name:activeCat}); return render(); }
+  const r = e.target.closest('[data-rest]'); if (r) return selectRestaurant(r.dataset.rest);
+});
+/* quick demo reset: tap the logo 5 times */
+let taps = 0; $('#brand').addEventListener('click', () => { if (++taps >= 5) resetDemo(); setTimeout(() => taps = 0, 2000); });
+
+/* ============================== Boot ============================== */
+(function boot() {
+  const q = new URLSearchParams(location.search);
+  if (q.has('reset')) { try { localStorage.removeItem(LS); } catch(e) {} try { amp() && amp().reset(); } catch(e) {} S = blank(); history.replaceState({}, '', location.pathname); }
+  if (!sessionStorage.getItem('fw_lp')) {
+    const src = trafficSource();
+    const path = location.hash ? '/' + location.hash.replace('#/','') : '/';
+    const props = Object.assign({landing_page_path:path}, src);
+    Object.keys(props).forEach(k => props[k] === undefined && delete props[k]);
+    T('Landing Page Viewed', props);
+    identify(i => { i.setOnce('acquisition_channel', src.traffic_source); i.setOnce('acquisition_medium', src.traffic_medium); i.setOnce('initial_landing_page', path); });
+    try { sessionStorage.setItem('fw_lp', '1'); } catch(e) {}
+  }
+  const v = location.hash.replace('#/','');
+  go(v && document.getElementById('view-' + v) ? v : 'home', {silent:true});
+  T('Offers Viewed', {offers_visible:COUPONS.length, source_page:'/'});
+})();
+</script>
+</body>
+</html>
