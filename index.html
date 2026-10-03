@@ -230,14 +230,14 @@ h2.sec{font-family:var(--display);font-size:20px;line-height:1.15;margin:26px 18
 
     <!-- ORDER -->
     <section class="view" id="view-order" data-view="order">
-      <h2 class="sec">Bestellen</h2>
+      <h2 class="sec">Speisekarte</h2>
       <div class="chips" id="cat-chips"></div>
       <div id="menu-list"></div>
     </section>
 
     <!-- RESTAURANTS -->
     <section class="view" id="view-restaurants" data-view="restaurants">
-      <h2 class="sec">Restaurants</h2>
+      <h2 class="sec">Restaurant finden</h2>
       <div class="card" id="loc-card">
         <h3>Restaurants in deiner Nähe</h3>
         <p class="sub">Mit deinem Standort zeigen wir dir Öffnungszeiten, Drive-In und Wartezeiten.</p>
@@ -591,13 +591,14 @@ function prodRow(p, scope) {
 }
 let activeCat = 'Alle';
 function render() {
-  $('#home-coupons').innerHTML = COUPONS.slice(0, 4).map(c => ticket(c, 'home')).join('');
-  $('#coupon-list').innerHTML = COUPONS.map(c => ticket(c, 'tab')).join('');
-  $('#home-products').innerHTML = PRODUCTS.filter(p => ['double','classic','chicken'].includes(p.id)).map(p => prodRow(p, 'home')).join('');
+  const vis = v => $('#view-' + v).classList.contains('on');
+  $('#home-coupons').innerHTML = vis('home') ? COUPONS.slice(0, 4).map(c => ticket(c, 'home')).join('') : '';
+  $('#coupon-list').innerHTML = vis('coupons') ? COUPONS.map(c => ticket(c, 'tab')).join('') : '';
+  $('#home-products').innerHTML = vis('home') ? PRODUCTS.filter(p => ['double','classic','chicken'].includes(p.id)).map(p => prodRow(p, 'home')).join('') : '';
   const cats = ['Alle', ...new Set(PRODUCTS.map(p => p.cat))];
   $('#cat-chips').innerHTML = cats.map(c => `<button class="chip ${c === activeCat ? 'on' : ''}" data-cat="${c}">${c}</button>`).join('');
-  $('#menu-list').innerHTML = PRODUCTS.filter(p => activeCat === 'Alle' || p.cat === activeCat).map(p => prodRow(p, 'menu')).join('');
-  $('#restaurant-list').innerHTML = RESTAURANTS.map(r => `<button class="rest ${S.restaurant === r.id ? 'on' : ''}" id="rest-${r.id}" data-rest="${r.id}">
+  $('#menu-list').innerHTML = !vis('order') ? '' : PRODUCTS.filter(p => activeCat === 'Alle' || p.cat === activeCat).map(p => prodRow(p, 'menu')).join('');
+  $('#restaurant-list').innerHTML = !vis('restaurants') ? '' : RESTAURANTS.map(r => `<button class="rest ${S.restaurant === r.id ? 'on' : ''}" id="rest-${r.id}" data-rest="${r.id}">
     <div class="pin"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2A1810" stroke-width="2.4"><path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z"/></svg></div>
     <div><b>${r.name}</b><small>${S.location ? r.dist + ' · ' : ''}${r.drive ? 'Drive-In · ' : ''}ca. ${r.wait} Min. Wartezeit</small></div>
     ${S.restaurant === r.id ? '<span class="tag">Mein Restaurant</span>' : ''}</button>`).join('');
