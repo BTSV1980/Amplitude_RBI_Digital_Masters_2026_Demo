@@ -360,8 +360,32 @@ function T(name, props) { try { amp() && amp().track(name, props || {}); } catch
 function identify(fn) { try { if (!amp()) return; const id = new amp().Identify(); fn(id); amp().identify(id); } catch(e) {} }
 
 /* traffic source classification — mirrors the historical taxonomy */
+/* DemoBot / simulation: ?src=demobot picks a weighted random source matching the historical mix.
+   Every such visit is flagged with is_simulated=true so it can be filtered out later. */
+const SIM_SOURCES = [
+  // [traffic_source, traffic_medium, utm_source, utm_medium, utm_campaign, referring_domain, weight]
+  ['Google','organic',null,null,null,'www.google.com',24],
+  ['Google Ads','paid_search','google','cpc','brand_search_sep26','www.google.com',11],
+  ['Instagram','social','instagram','paid_social','herbst_deals_sep26','l.instagram.com',16],
+  ['Facebook','social','facebook','paid_social','herbst_deals_sep26','l.facebook.com',9],
+  ['TikTok','social','tiktok','paid_social','double_smash_launch','www.tiktok.com',8],
+  ['Direct','direct',null,null,null,null,14],
+  ['Newsletter','email','newsletter','email','coupon_drop_kw38',null,4],
+  ['ChatGPT','ai_assistant','chatgpt.com','referral',null,'chatgpt.com',9],
+  ['Perplexity','ai_assistant','perplexity','referral',null,'www.perplexity.ai',3],
+  ['Gemini','ai_assistant','gemini','referral',null,'gemini.google.com',2]
+];
+function simulatedSource() {
+  const total = SIM_SOURCES.reduce((s, x) => s + x[6], 0);
+  let r = Math.random() * total, pick = SIM_SOURCES[0];
+  for (const x of SIM_SOURCES) { if ((r -= x[6]) < 0) { pick = x; break; } }
+  const [src, med, us, um, uc, ref] = pick;
+  return {traffic_source:src, traffic_medium:med, utm_source:us || undefined, utm_medium:um || undefined,
+    utm_campaign:uc || undefined, referring_domain:ref || undefined, is_ai_referral: med === 'ai_assistant', is_simulated:true};
+}
 function trafficSource() {
   const q = new URLSearchParams(location.search);
+  if ((q.get('src') || '').toLowerCase() === 'demobot') return simulatedSource();
   const us = (q.get('src') || q.get('utm_source') || '').toLowerCase();
   const um = (q.get('utm_medium') || '').toLowerCase();
   let ref = ''; try { ref = document.referrer ? new URL(document.referrer).hostname : ''; } catch(e) {}
