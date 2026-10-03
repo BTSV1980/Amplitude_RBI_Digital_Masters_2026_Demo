@@ -16,7 +16,9 @@
     var KEY = 'f635d92a69c06c9cf12789c8c5496569';
     try {
       if (window.sessionReplay) window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
-      if (window.engagement) window.amplitude.add(window.engagement.plugin());
+      // Guides & Surveys locale: default German, override with ?lang=en-US (format xx-XX)
+      var GS_LOCALE = new URLSearchParams(location.search).get('lang') || 'de-DE';
+      if (window.engagement) window.amplitude.add(window.engagement.plugin({ locale: GS_LOCALE }));
       window.amplitude.init(KEY, {
         fetchRemoteConfig: true,
         autocapture: {
@@ -364,6 +366,7 @@ function trafficSource() {
   const um = (q.get('utm_medium') || '').toLowerCase();
   let ref = ''; try { ref = document.referrer ? new URL(document.referrer).hostname : ''; } catch(e) {}
   if (ref && ref === location.hostname) ref = '';
+  if (!ref && q.get('ref')) ref = q.get('ref');   // referrer forwarded by phone.html wrapper
   const has = (s, ...k) => k.some(x => s.includes(x));
   let src = 'Direct', med = 'direct';
   if (us) {
